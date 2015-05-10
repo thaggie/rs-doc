@@ -21,4 +21,4 @@ Arguments:
 
 `java -jar rs-doc-builder/build/libs/rs-doc-builder.jar rs-doc-example/build/libs/rs-doc-example.jar .`
 
-Creates [api.md](blob/master/api.md)
+Creates [api.md](api.md)
