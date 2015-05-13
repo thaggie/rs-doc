@@ -1,4 +1,6 @@
-apply from: '../common.gradle'
+apply from: '../published.gradle'
+
+project.description = "Tool for building documentation from jax-rs APIs."
 
 dependencies {
 	compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'

@@ -1,0 +1,54 @@
+apply from: '../common.gradle'
+
+task javadocJar (type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+task sourceJar (type : Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        myPublication(MavenPublication) {
+            from components.java
+			artifact (javadocJar) { 
+                classifier = 'javadoc'
+            }
+            artifact (sourceJar) {
+                classifier = 'sources'
+            }
+
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name "$project.name"
+                    description "$project.description"
+                    url "https://github.com/thaggie/$project.group"
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'thaggie'
+                            name 'Tom Haggie'
+                            email 'thaggie@gmail.com'
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // publish to the artifacts dir
+    repositories {
+        maven {
+            url "file:/${project.projectDir}/../artifacts"
+        }
+    }
+}

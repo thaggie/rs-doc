@@ -1,1 +1,3 @@
-apply from: '../common.gradle'
+apply from: '../published.gradle'
+
+project.description = "Annotations library for adding documentation to jax-rs APIs."

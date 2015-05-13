@@ -3,9 +3,11 @@ apply plugin: 'eclipse'
 apply plugin: 'findbugs'
 apply plugin: 'maven-publish'
 
-
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
+
+group = 'rs-doc'
+version = '1.0'
 
 repositories {
     mavenCentral()
@@ -34,9 +36,4 @@ test {
         junitXml.enabled = true
         html.enabled = true
     }
-}
-
-jar.doLast { task ->
-    ant.checksum(file: task.archivePath)
-
 }

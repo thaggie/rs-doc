@@ -3,6 +3,7 @@
 .classpath
 .project
 .metadata
+artifacts/
 build/
 bin/
 .DS_Store
