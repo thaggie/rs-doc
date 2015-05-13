@@ -70,17 +70,16 @@ public class RsDocBuilder {
 
 		if (args.length >= 4) {
 			File projectDir = new File(args[2]);
-			if (!projectDir.isDirectory()) {
+			if (projectDir.exists() && !projectDir.isDirectory()) {
 				System.out.println(projectDir.getCanonicalFile() + " is not a directory.");
-			}
-	
-	
-			String packageName = args[3];
-			File clientOutputDir = new File(projectDir, "src/main/java/" + packageName.replace("\\.", "/"));
-			if (clientOutputDir.mkdirs()) {
-				BuilderGenerator.generateClasses(clientOutputDir, packageName, endpoints);
 			} else {
-				System.out.println("Unable to create: " + clientOutputDir.getCanonicalPath());
+				String packageName = args[3];
+				File clientOutputDir = new File(projectDir, "src/main/java/" + packageName.replace(".", "/"));
+				if (!clientOutputDir.isDirectory()) {
+					System.out.println("Unable to create: " + clientOutputDir.getCanonicalPath());
+					return;
+				}
+				BuilderGenerator.generateClasses(clientOutputDir, packageName, endpoints);
 			}
 		}
 	}

@@ -34,6 +34,7 @@ public class BuilderGenerator {
 		if (endpoint.description != null) {
 			generatedCode.append(" * ");
 			generatedCode.append(endpoint.description);
+			generatedCode.append("\n");
 		}
 		generatedCode.append(" * ");
 		generatedCode.append(endpoint.method);

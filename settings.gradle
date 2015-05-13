@@ -1,3 +1,4 @@
 include 'rs-doc-annotations',
         'rs-doc-builder',
-        'rs-doc-example'
+        'rs-doc-example',
+	'rs-doc-example-client'

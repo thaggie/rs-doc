@@ -56,10 +56,12 @@ Arguments:
 
 * The jar file with the endpoints
 * The directory to write the api.md file to
+* Optionally a directory in which to create a Java client library
+* Optionally a package name for the Java Client Library
 
-`java -jar rs-doc-builder/build/libs/rs-doc-builder.jar rs-doc-example/build/libs/rs-doc-example.jar .`
+`java -jar rs-doc-builder/build/libs/rs-doc-builder.jar rs-doc-example/build/libs/rs-doc-example.jar . rs-doc-example-client  rs.doc.example.client`
 
-Creates [api.md](api.md)
+Creates [api.md](api.md) and [rs-doc-example-client](tree/master/rs-doc-example-client)
 
 ##License
 
