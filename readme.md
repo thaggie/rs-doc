@@ -61,7 +61,7 @@ Arguments:
 
 `java -jar rs-doc-builder/build/libs/rs-doc-builder.jar rs-doc-example/build/libs/rs-doc-example.jar . rs-doc-example-client  rs.doc.example.client`
 
-Creates [api.md](api.md) and [rs-doc-example-client](tree/master/rs-doc-example-client)
+Creates [api.md](api.md) and [rs-doc-example-client](rs-doc-example-client)
 
 ##License
 
