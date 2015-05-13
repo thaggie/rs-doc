@@ -77,8 +77,11 @@ public class RsDocBuilder {
 	
 			String packageName = args[3];
 			File clientOutputDir = new File(projectDir, "src/main/java/" + packageName.replace("\\.", "/"));
-			clientOutputDir.mkdirs();
-			BuilderGenerator.generateClasses(clientOutputDir, packageName, endpoints);
+			if (clientOutputDir.mkdirs()) {
+				BuilderGenerator.generateClasses(clientOutputDir, packageName, endpoints);
+			} else {
+				System.out.println("Unable to create: " + clientOutputDir.getCanonicalPath());
+			}
 		}
 	}
 
@@ -135,39 +138,38 @@ public class RsDocBuilder {
 
 				for (String verb : verbs) {
 					if (verb != null) {
-						if (methodPath != null) {
+						String path = resourcePath.value() + "/" + stripSlash(methodPath.value());
 
-							String path = resourcePath.value() + "/" + stripSlash(methodPath.value());
+						Annotation[][] pass = method.getParameterAnnotations();
+						Class<?>[] parameterTypes = method.getParameterTypes();
+						List<Parameter> pathParameters = new ArrayList<Parameter>(parameterTypes.length);
+						List<Parameter> queryParameters = new ArrayList<Parameter>(parameterTypes.length);
+						List<Parameter> formParameters = new ArrayList<Parameter>(parameterTypes.length);
 
-							Annotation[][] pass = method.getParameterAnnotations();
-							Class<?>[] parameterTypes = method.getParameterTypes();
-							List<Parameter> pathParameters = new ArrayList<Parameter>(parameterTypes.length);
-							List<Parameter> queryParameters = new ArrayList<Parameter>(parameterTypes.length);
-							List<Parameter> formParameters = new ArrayList<Parameter>(parameterTypes.length);
-
-							for (int i = 0; i < pass.length; ++i) {
-								Class<?> parameterType = parameterTypes[i];
-								Annotation[] pas = pass[i];
-								String description = findDoc(pas);
-								for (Annotation pa : pas) {
-									Class<? extends Annotation> type = pa.annotationType();
-									if (type == PathParam.class) {
-										PathParam qp = (PathParam) pa;
-										pathParameters.add(new Parameter(qp.value(), description, parameterType));
-									} else if (type == QueryParam.class) {
-										QueryParam qp = (QueryParam) pa;
-										queryParameters.add(new Parameter(qp.value(), description, parameterType));
-									} else if (type == FormParam.class) {
-										FormParam fp = (FormParam) pa;
-										formParameters.add(new Parameter(fp.value(), description, parameterType));
-									}
+						for (int i = 0; i < pass.length; ++i) {
+							Class<?> parameterType = parameterTypes[i];
+							Annotation[] pas = pass[i];
+							String description = findDoc(pas);
+							for (Annotation pa : pas) {
+								Class<? extends Annotation> type = pa.annotationType();
+								if (type == PathParam.class) {
+									PathParam qp = (PathParam) pa;
+									pathParameters.add(new Parameter(qp.value(), description, parameterType));
+								} else if (type == QueryParam.class) {
+									QueryParam qp = (QueryParam) pa;
+									queryParameters.add(new Parameter(qp.value(), description, parameterType));
+								} else if (type == FormParam.class) {
+									FormParam fp = (FormParam) pa;
+									formParameters.add(new Parameter(fp.value(), description, parameterType));
 								}
 							}
-
-							endpoints.add(new Endpoint(className, methodName, verb, methodDescription, path, pathParameters,
-									queryParameters, formParameters, deprecated != null, produces == null ? null : produces
-											.value(), returnType));
 						}
+
+						String[] empty = {};
+						endpoints.add(new Endpoint(className, methodName, verb, methodDescription, path, pathParameters,
+								queryParameters, formParameters, deprecated != null, produces == null ? empty : produces
+										.value(), returnType));
+					
 					}
 				}
 			}

@@ -1,45 +1,4 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'findbugs'
-
-
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
-
-
-repositories {
-    mavenCentral()
-}
-
-findbugs {
-  toolVersion = "3.0.0"
-  sourceSets = [sourceSets.main]
-  reportsDir = file("$project.buildDir/reports/findbugs")
-  effort = "max"
-  ignoreFailures = project.hasProperty('ignoreFindbugsFailures')
-}
-
-//force findbugsMain to run no matter if the files has changed
-findbugsMain.outputs.upToDateWhen { false }
-
-tasks.withType(FindBugs) {
-  reports {
-    xml.enabled = project.hasProperty('findBugsXml')
-    html.enabled = !project.hasProperty('findBugsXml')
-  }
-}
-
-test {
-    reports {
-        junitXml.enabled = true
-        html.enabled = true
-    }
-}
-
-jar.doLast { task ->
-    ant.checksum(file: task.archivePath)
-
-}
+apply from: '../common.gradle'
 
 dependencies {
 	compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
@@ -47,6 +6,7 @@ dependencies {
 	compile 'org.apache.commons:commons-lang3:3.4'
 	compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.5.2"
 	compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-xml-provider:2.5.2"
+  
 	compile project(':rs-doc-annotations')
 }
 
